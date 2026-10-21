@@ -37,3 +37,6 @@ appsettings.*.local.json
 # macOS
 .DS_Store
 /.idea/
+/module-07-containers-docker/postgres-data/
+/module-07-containers-docker/mongodb-data/
+/module-07-containers-docker/mongo-data/
