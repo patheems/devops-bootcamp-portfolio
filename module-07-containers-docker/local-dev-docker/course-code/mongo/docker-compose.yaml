@@ -1,0 +1,40 @@
+name: techworld-with-nana
+
+services:
+  my-app:
+    image: ${DOCKER_REGISTRY}/my-app:1.1
+    ports:
+      - "3000:3000"
+    networks:
+      - tw-network
+  mongodb:
+    image: mongo:7.0
+    container_name: tw-mongodb-7
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - "27017:27017"
+    networks:
+      - tw-network
+    volumes:
+      - "${MONGO_DATA_DIR:-./mongo-data}:/data/db"
+
+  mongo-express:
+    image: techworldwithnana/mongo-express:latest
+    container_name: tw-mongo-express
+    ports:
+      - "8091:8081"
+    restart: always
+    environment:
+      - ME_CONFIG_MONGODB_URL=mongodb://admin:password@mongodb:27017
+      - ME_CONFIG_BASICAUTH_USERNAME=user
+      - ME_CONFIG_BASICAUTH_PASSWORD=pass
+    networks:
+      - tw-network
+    depends_on:
+      - "mongodb"
+
+networks:
+  tw-network:
+    driver: bridge
